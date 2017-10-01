@@ -2,6 +2,8 @@ sprite = require "sprite"
 force = require 'force'
 character = require "character"
 
+
+
 local elapsed_time = 0
 local entities = {}
 

@@ -1,3 +1,13 @@
+libquadtastic = require "vendor/libquadtastic"
+
+
+-- load the raw quad definitions that you created with Quadtastic
+local c_raw_quads = require("quads/core-centaur-quads")
+c_image = love.graphics.newImage("quads/core-centaur.png") -- load spritesheet
+
+-- Create LÖVE Quads from raw quad definitions
+c_quads = libquadtastic.create_quads(c_raw_quads, c_image:getWidth(), c_image:getHeight())
+
 local character = {}
 
 function character.create_dude()
@@ -11,9 +21,11 @@ function character.create_dude()
 	dude.framerate = 1/15 -- seconds
 	dude.last_update = 0
 	dude.sheet = { idle = { "-{o}-" }, punch = { "-{0}--", "-{0}---", "-{0}--=", "-{0}--==", "-{0}--=", "-{0}--", "-{0}--" } }
+	dude.spr_type = "text"
 	-- dude.curr_sprite = "idle"
 	-- dude.curr_sprite = 
 	dude.anim_stack = { { name = "idle", frame = 1, done = false } }
+	dude.right = true
 	return dude
 end
 
@@ -28,7 +40,30 @@ function character.create_badguy()
 	badguy.mass = 0.3
 	badguy.framerate = 1/15 -- seconds
 	badguy.last_update = 0
-	badguy.sheet = { idle = { "/.V.\\" }, get_hit = { "HIT!", "HIT!", "HIT!", "HIT!", "HIT!", "HIT!"} }
+	badguy.right = false
+	-- badguy.sheet = { idle = { "/.V.\\" }, get_hit = { "HIT!", "HIT!", "HIT!", "HIT!", "HIT!", "HIT!"} }/
+	badguy.image = c_image
+	badguy.sheet = {
+		idle = {
+			c_quads.run['run-1'],
+			c_quads.run['run-1'],
+			c_quads.run['run-2'],
+			c_quads.run['run-2'],
+		},
+		get_hit = {
+			c_quads.stand['stand-1'],
+			c_quads.stand['stand-1'],
+			c_quads.stand['stand-1'],
+			c_quads.stand['stand-1'],
+			c_quads.stand['stand-1'],
+			c_quads.stand['stand-1'],
+			c_quads.stand['stand-1'],
+			c_quads.stand['stand-1'],
+			c_quads.stand['stand-1'],
+			c_quads.stand['stand-1']
+		}
+	}
+	badguy.spr_type = "img"
 	-- badguy.curr_sprite = "idle"
 	-- badguy.curr_sprite = { name = "idle", frame = 1, done = false }
 	badguy.anim_stack = { { name = "idle", frame = 1, done = false } }
